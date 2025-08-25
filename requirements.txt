@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+requests
+pymongo
+python-dotenv
+jinja2
+openai
+requests
+pandas
+langchain
+langchain-openai
+azure-eventhub
+azure-storage-blob

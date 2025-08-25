@@ -1,0 +1,249 @@
+<!-- frontend/index.html -->
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uçuş Analizi Asistanı</title>
+    <script defer src="/static/app.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            background-color: #f5f7fa;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #34495e;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .question-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            font-size: 16px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            resize: vertical;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 24px;
+            margin: 10px 5px 0 0;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        button:active {
+            background-color: #21618c;
+        }
+
+        #response {
+            margin-top: 20px;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            white-space: pre-wrap;
+            min-height: 50px;
+            border-left: 4px solid #3498db;
+        }
+
+        .data-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .controls {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+
+        #loading {
+            text-align: center;
+            color: #7f8c8d;
+            font-style: italic;
+            padding: 20px;
+        }
+
+        #error {
+            background-color: #e74c3c;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px 8px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        th {
+            background-color: #34495e;
+            color: white;
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        tr:hover {
+            background-color: #e8f4fd;
+        }
+
+        td {
+            max-width: 120px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-success {
+            background-color: #27ae60;
+        }
+
+        .status-error {
+            background-color: #e74c3c;
+        }
+
+        .status-loading {
+            background-color: #f39c12;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .table-container {
+            overflow-x: auto;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 20px;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 8px 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✈️ Uçuş Analizi Asistanı</h1>
+
+        <div class="question-section">
+            <h2>🤖 AI Asistan</h2>
+            <textarea id="userQuery" placeholder="Uçuşlarla ilgili sorunuzu yazın... (Örn: 'En yüksek irtifada uçan uçak hangisi?')"></textarea>
+            <br>
+            <button onclick="askQuestion()">🔍 Sor</button>
+            <div id="response">Sorunuzu yazın ve cevap almak için 'Sor' butonuna tıklayın...</div>
+        </div>
+
+        <div class="data-section">
+            <h2>📊 Uçuş Verileri</h2>
+
+            <div class="controls">
+                <button onclick="refreshData()">🔄 Verileri Yenile</button>
+            </div>
+
+            <div id="loading">
+                <span class="status-indicator status-loading"></span>
+                Uçuş verileri yükleniyor...
+            </div>
+
+            <div id="error"></div>
+
+            <div class="table-container">
+                <table id="flightTable" style="display: none;">
+                    <thead>
+                        <tr>
+                            <th>🏷️ Çağrı İşareti</th>
+                            <th>🆔 ICAO24</th>
+                            <th>🌍 Ülke</th>
+                            <th>⚡ Hız (m/s)</th>
+                            <th>📏 İrtifa (m)</th>
+                            <th>🗺️ Enlem</th>
+                            <th>🗺️ Boylam</th>
+                            <th>⏰ Zaman</th>
+                        </tr>
+                    </thead>
+                    <tbody id="flightData">
+                        <!-- Uçuş verileri burada listelenecek -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
