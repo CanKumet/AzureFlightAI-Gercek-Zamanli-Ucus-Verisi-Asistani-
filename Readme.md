@@ -304,30 +304,6 @@ logging.basicConfig(level=logging.INFO)
 - Connection stringler environment variables olarak yönetilmeli
 - Production'da Azure Key Vault kullanılmalı
 
-### .gitignore Örneği
-```bash
-# Environment variables
-.env
-.env.local
-.env.production
-
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-env/
-venv/
-.venv/
-
-# IDE
-.vscode/
-.idea/
-
-# Logs
-*.log
-```
 
 ## 📄 Lisans
 
