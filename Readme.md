@@ -27,12 +27,19 @@ graph TB
         F --> G
         J --> K[Kullanıcı Arayüzü]
     end
-    
-    style A fill:#e1f5fe
-    style C fill:#f3e5f5
-    style D fill:#f3e5f5
-    style G fill:#e8f5e8
-    style H fill:#fff3e0
+
+    %% 🔷 Renk stilleri (daha canlı)
+    style A fill:#03a9f4,color:#fff,fontWeight:bold
+    style B fill:#4fc3f7,color:#000
+    style C fill:#ab47bc,color:#fff,fontWeight:bold
+    style D fill:#ba68c8,color:#fff
+    style E fill:#ce93d8,color:#000
+    style F fill:#d1c4e9,color:#000
+    style G fill:#43a047,color:#fff,fontWeight:bold
+    style H fill:#fb8c00,color:#fff,fontWeight:bold
+    style I fill:#ffb74d,color:#000
+    style J fill:#ffe082,color:#000
+    style K fill:#ffd54f,color:#000
 ```
 
 ## 🚀 Özellikler
